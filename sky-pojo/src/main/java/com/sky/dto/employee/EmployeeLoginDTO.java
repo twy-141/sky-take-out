@@ -1,4 +1,4 @@
-package com.sky.dto;
+package com.sky.dto.employee;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
