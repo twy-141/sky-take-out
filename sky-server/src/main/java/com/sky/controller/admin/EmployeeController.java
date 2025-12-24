@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.constant.JwtClaimsConstant;
+import com.sky.dto.employee.EmpStatusDto;
 import com.sky.dto.employee.EmployeeDTO;
 import com.sky.dto.employee.EmployeeLoginDTO;
 import com.sky.dto.employee.EmployeePageQueryDTO;
@@ -91,5 +92,16 @@ public class EmployeeController {
         log.info("分页查询员工：{}", employeePageQueryDTO);
         PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 启用禁用员工账号
+     */
+    @PostMapping("/status")
+    @ApiOperation("启用禁用员工账号")
+    public Result<String> enableOrDisable(@RequestBody EmpStatusDto empStatusDto) {
+        log.info("启用禁用员工账号：{}", empStatusDto);
+        employeeService.enableOrDisable(empStatusDto);
+        return Result.success();
     }
 }

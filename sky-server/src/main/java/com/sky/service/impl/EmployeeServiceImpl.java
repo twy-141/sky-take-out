@@ -6,6 +6,7 @@ import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.employee.EmpStatusDto;
 import com.sky.dto.employee.EmployeeDTO;
 import com.sky.dto.employee.EmployeeLoginDTO;
 import com.sky.dto.employee.EmployeePageQueryDTO;
@@ -98,5 +99,17 @@ public class EmployeeServiceImpl implements EmployeeService {
         List<Employee> EmployeeList = employeeMapper.pageQuery(employeePageQueryDTO);
         Page<Employee> page = (Page<Employee>) EmployeeList;
         return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    /**
+     * 启用禁用员工账号
+     */
+    public void enableOrDisable(EmpStatusDto empStatusDto) {
+        Employee employee = new Employee();
+        employee.setId(empStatusDto.getId());
+        employee.setStatus(empStatusDto.getStatus());
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.update(employee);
     }
 }
