@@ -1,4 +1,4 @@
-package com.sky.dto;
+package com.sky.dto.category;
 
 import lombok.Data;
 
