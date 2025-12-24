@@ -13,6 +13,7 @@ import com.sky.dto.employee.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
+import com.sky.exception.BaseException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
@@ -94,11 +95,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     /**
      * 分页查询员工
      */
-    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+    public PageResult<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
         PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
         List<Employee> EmployeeList = employeeMapper.pageQuery(employeePageQueryDTO);
         Page<Employee> page = (Page<Employee>) EmployeeList;
-        return new PageResult(page.getTotal(), page.getResult());
+        return new PageResult<>(page.getTotal(), page.getResult());
     }
 
     /**
@@ -111,5 +112,30 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setUpdateTime(LocalDateTime.now());
         employee.setUpdateUser(BaseContext.getCurrentId());
         employeeMapper.update(employee);
+    }
+
+    /**
+     * 编辑员工
+     */
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        Integer result = employeeMapper.update(employee);
+        if (result == 0) {
+            throw new BaseException(MessageConstant.UNKNOWN_ERROR);
+        }
+    }
+
+    /**
+     * 根据id查询员工
+     */
+    public Employee getById(Long id) {
+        Employee employee = employeeMapper.selectById(id);
+        if (employee == null) {
+            throw new BaseException(MessageConstant.ACCOUNT_NOT_FOUND);
+        }
+        return employee;
     }
 }
