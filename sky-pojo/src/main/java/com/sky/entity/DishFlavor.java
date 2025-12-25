@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,18 +16,20 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "菜品口味实体")
 public class DishFlavor implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "菜品口味ID")
     private Long id;
-    //菜品id
+    @ApiModelProperty(value = "菜品ID")
     private Long dishId;
 
-    //口味名称
+    @ApiModelProperty(value = "口味名称")
     private String name;
 
-    //口味数据list
+    @ApiModelProperty(value = "口味数据list")
     private String value;
 
 }

@@ -1,5 +1,7 @@
 package com.sky.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,28 +17,30 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(description = "菜品实体")
 public class Dish implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "菜品id")
     private Long id;
 
-    //菜品名称
+    @ApiModelProperty(value = "菜品名称")
     private String name;
 
-    //菜品分类id
+    @ApiModelProperty(value = "菜品分类id")
     private Long categoryId;
 
-    //菜品价格
+    @ApiModelProperty(value = "菜品价格")
     private BigDecimal price;
 
-    //图片
+    @ApiModelProperty(value = "图片")
     private String image;
 
-    //描述信息
+    @ApiModelProperty(value = "描述信息")
     private String description;
 
-    //0 停售 1 起售
+    @ApiModelProperty(value = "菜品状态 0标识停售 1表示起售")
     private Integer status;
 
     private LocalDateTime createTime;
