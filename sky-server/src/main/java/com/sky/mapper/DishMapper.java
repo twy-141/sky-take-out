@@ -26,4 +26,6 @@ public interface DishMapper {
      * 分页查询菜品
      */
     List<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
+
+    void update(Dish dish);
 }
