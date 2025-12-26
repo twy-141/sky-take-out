@@ -1,6 +1,9 @@
 package com.sky.service;
 
+import java.util.List;
+
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.dto.category.DishStatusDTO;
 import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.vo.DishVO;
@@ -15,4 +18,19 @@ public interface DishService {
      * 修改菜品
      */
     void update(Dish dish);
+
+    /**
+     * 根据ID查询菜品
+     */
+    Dish getById(Long id);
+
+    /**
+     * 根据分类ID查询菜品
+     */
+    List<Dish> selectByCategoryId(Long categoryId);
+
+    /**
+     * 菜品启售停售
+     */
+    void updateStatus(DishStatusDTO dishStatusDTO);
 }

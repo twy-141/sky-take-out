@@ -1,6 +1,7 @@
 package com.sky.controller.admin;
 
 import com.sky.dto.DishPageQueryDTO;
+import com.sky.dto.category.DishStatusDTO;
 import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
@@ -8,13 +9,20 @@ import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/admin/dish")
 @Api(tags = "菜品相关接口")
@@ -26,20 +34,51 @@ public class DishController {
     /**
      * 分页查询菜品
      */
-     @GetMapping("/page")
-     @ApiOperation("分页查询菜品")
-     public Result<PageResult<DishVO>> pageQuery(DishPageQueryDTO dishPageQueryDTO) {
-         PageResult<DishVO> pageResult = dishService.pageQuery(dishPageQueryDTO);
-         return Result.success(pageResult);
-     }
+    @GetMapping("/page")
+    @ApiOperation("分页查询菜品")
+    public Result<PageResult<DishVO>> pageQuery(DishPageQueryDTO dishPageQueryDTO) {
+        PageResult<DishVO> pageResult = dishService.pageQuery(dishPageQueryDTO);
+        return Result.success(pageResult);
+    }
 
-     /**
-      * 修改菜品
-      */
-     @PutMapping
-     @ApiOperation("修改菜品")
-     public Result update(@RequestBody Dish dish) {
-         dishService.update(dish);
-         return Result.success();
-     }
+    /**
+     * 根据ID查询菜品
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据ID查询菜品")
+    public Result<Dish> getById(@PathVariable Long id) {
+        Dish dish = dishService.getById(id);
+        return Result.success(dish);
+    }
+
+    /**
+     * 根据分类ID查询菜品
+     */
+    @GetMapping("/categoryList")
+    @ApiOperation("根据分类ID查询菜品")
+    public Result<List<Dish>> getByCategoryId(Long categoryId) {
+        List<Dish> dishList = dishService.selectByCategoryId(categoryId);
+        return Result.success(dishList);
+    }
+
+    /**
+     * 修改菜品
+     */
+    @PutMapping
+    @ApiOperation("修改菜品")
+    public Result update(@RequestBody Dish dish) {
+        dishService.update(dish);
+        return Result.success();
+    }
+
+    /**
+     * 菜品启售停售
+     */
+    @PutMapping("/status")
+    @ApiOperation("菜品启售停售")
+    public Result updateStatus(@RequestBody DishStatusDTO dishStatusDTO) {
+        log.info("菜品启售停售，dishStatusDTO={}", dishStatusDTO);
+        dishService.updateStatus(dishStatusDTO);
+        return Result.success();
+    }
 }
