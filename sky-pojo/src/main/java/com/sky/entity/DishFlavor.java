@@ -23,6 +23,7 @@ public class DishFlavor implements Serializable {
 
     @ApiModelProperty(value = "菜品口味ID")
     private Long id;
+    
     @ApiModelProperty(value = "菜品ID")
     private Long dishId;
 
