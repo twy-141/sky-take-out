@@ -5,8 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.sky.context.BaseContext;
 import com.sky.dto.category.CategoryPageQueryDTO;
 import com.sky.dto.category.CategoryStatusDto;
-import com.sky.dto.dish.DishDTO;
-import com.sky.entity.Dish;
+import com.sky.vo.DishVO;
 import com.sky.exception.BaseException;
 import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishMapper;
@@ -112,7 +111,7 @@ public class CategoryServiceImpl implements CategoryService {
             if (existingCategory == null) {
                 throw new BaseException("分类不存在");
             }
-            List<DishDTO> existingDishes = dishMapper.selectByCategoryId(id);
+            List<DishVO> existingDishes = dishMapper.selectByCategoryId(id);
             if (!existingDishes.isEmpty()) {
                 throw new BaseException("分类关联了菜品或套餐，不能删除");
             }

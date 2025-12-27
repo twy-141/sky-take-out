@@ -58,22 +58,35 @@ public class DishServiceImpl implements DishService {
      * 修改菜品
      */
     @Transactional(rollbackFor = Exception.class)
-    public void update(Dish dish) {
+    public void update(DishDTO dishDTO) {
         // 校验菜品是否存在
-        Dish existDish = dishMapper.selectById(dish.getId());
+        Dish existDish = dishMapper.selectByIdForUpdate(dishDTO.getId());
         if (existDish == null) {
             throw new BaseException("菜品不存在");
         }
-        dish.setUpdateTime(LocalDateTime.now());
-        dish.setUpdateUser(BaseContext.getCurrentId());
-        dishMapper.update(dish);
+        // 复制属性
+        BeanUtils.copyProperties(dishDTO, existDish);
+        existDish.setUpdateTime(LocalDateTime.now());
+        existDish.setUpdateUser(BaseContext.getCurrentId());
+        dishMapper.update(existDish);
+        // 新增菜品口味
+        List<DishFlavor> dishFlavorList = dishDTO.getFlavors();
+        if (CollectionUtils.isNotEmpty(dishFlavorList)) {
+            // 删除原有的口味
+            dishFlavorMapper.deleteBatchByDishIds(java.util.Collections.singletonList(existDish.getId()));
+            // 新增新的口味
+            dishFlavorList.forEach(dishFlavor -> {
+                dishFlavor.setDishId(existDish.getId());
+            });
+            dishFlavorMapper.insertBatch(dishFlavorList);
+        }
     }
 
     /**
      * 根据ID查询菜品
      */
-    public Dish getById(Long id) {
-        Dish dish = dishMapper.selectById(id);
+    public DishVO getById(Long id) {
+        DishVO dish = dishMapper.selectById(id);
         if (dish == null) {
             throw new BaseException("菜品不存在");
         }
@@ -83,7 +96,7 @@ public class DishServiceImpl implements DishService {
     /**
      * 根据分类ID查询菜品
      */
-    public List<DishDTO> selectByCategoryId(Long categoryId) {
+    public List<DishVO> selectByCategoryId(Long categoryId) {
         return dishMapper.selectByCategoryId(categoryId);
     }
 
@@ -93,7 +106,7 @@ public class DishServiceImpl implements DishService {
     @Transactional(rollbackFor = Exception.class)
     public void updateStatus(DishStatusDTO dishStatusDTO) {
         // 校验菜品是否存在
-        Dish existDish = dishMapper.selectById(dishStatusDTO.getId());
+        Dish existDish = dishMapper.selectByIdForUpdate(dishStatusDTO.getId());
         if (existDish == null) {
             throw new BaseException("菜品不存在");
         }

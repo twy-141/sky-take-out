@@ -18,17 +18,17 @@ public interface DishService {
     /**
      * 修改菜品
      */
-    void update(Dish dish);
+    void update(DishDTO dishDTO);
 
     /**
      * 根据ID查询菜品
      */
-    Dish getById(Long id);
+    DishVO getById(Long id);
 
     /**
      * 根据分类ID查询菜品
      */
-    List<DishDTO> selectByCategoryId(Long categoryId);
+    List<DishVO> selectByCategoryId(Long categoryId);
 
     /**
      * 菜品启售停售

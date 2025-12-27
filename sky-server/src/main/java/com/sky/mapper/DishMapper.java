@@ -28,13 +28,18 @@ public interface DishMapper {
     /**
      * 根据ID查询菜品
      */
+    DishVO selectById(Long id);
+
+    /**
+     * 根据ID查询菜品(用户查询当前表不包含口味信息)
+     */
     @Select("select * from dish where id = #{id}")
-    Dish selectById(Long id);
+    Dish selectByIdForUpdate(Long id);
 
     /**
      * 根据分类ID查询菜品
      */
-    List<DishDTO> selectByCategoryId(Long categoryId);
+    List<DishVO> selectByCategoryId(Long categoryId);
 
     /**
      * 分页查询菜品

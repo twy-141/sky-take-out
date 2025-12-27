@@ -114,4 +114,19 @@
             #{id}
         </foreach>
     </select>
+
+    <!-- selectById --> 
+
+    <select id="selectById" resultMap="dishVOResultIdMap">
+        select d.*,
+               c.name     as categoryName,
+               df.id      as flavorId,
+               df.dish_id as flavorDishId,
+               df.name    as flavorName,
+               df.value   as flavorValue
+        from dish d
+                 left join dish_flavor df on d.id = df.dish_id
+                 left join category c on d.category_id = c.id
+        where d.id = #{id}
+    </select>
 </mapper>
