@@ -39,4 +39,9 @@ public interface DishService {
      * 新增菜品
      */
     void save(DishDTO dishDTO);
+
+    /**
+     * 批量删除菜品
+     */
+    void deleteBatch(List<Long> ids);
 }

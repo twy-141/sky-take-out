@@ -14,6 +14,17 @@ import java.util.List;
 
 @Mapper
 public interface DishMapper {
+
+    /**
+     * 根据id批量查询菜品
+     */
+    List<Dish> selectBatch(List<Long> ids);
+
+    /**
+     * 根据id批量删除菜品
+     */
+    void deleteBatch(List<Long> ids);
+
     /**
      * 根据ID查询菜品
      */
