@@ -1,6 +1,5 @@
 package com.sky.mapper;
 
-import com.sky.dto.dish.DishDTO;
 import com.sky.dto.dish.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.vo.DishVO;

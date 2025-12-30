@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetmealMapper">
+
+    <!-- 新增套餐 -->
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into setmeal (name, category_id, price, description, image, create_time, update_time, status,
+                             create_user,
+                             update_user)
+        values (#{name}, #{categoryId}, #{price}, #{description}, #{image}, #{createTime}, #{updateTime}, #{status},
+                #{createUser}, #{updateUser})
+    </insert>
+
+    <!-- 套餐分页查询 -->
+
+    <!-- 套餐分页查询结果映射 -->
+    <resultMap id="setmealVOResultMap" type="com.sky.vo.SetmealVO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="price" column="price"/>
+        <result property="description" column="description"/>
+        <result property="image" column="image"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="status" column="status"/>
+        <result property="categoryName" column="categoryName"/>
+
+        <collection property="setmealDishes" ofType="com.sky.entity.SetmealDish">
+            <result property="id" column="setmealDishId"/>
+            <result property="dishId" column="dishId"/>
+            <result property="setmealId" column="setmealId"/>
+            <result property="name" column="dishName"/>
+            <result property="price" column="dishPrice"/>
+            <result property="copies" column="dishCopies"/>
+        </collection>
+    </resultMap>
+
+    <select id="pageQuery" resultMap="setmealVOResultMap">
+        select s.*,
+               c.name        as categoryName,
+               sd.id         as setmealDishId,
+               sd.dish_id    as dishId,
+               sd.name       as dishName,
+               sd.setmeal_id as setmealId,
+               sd.price      as dishPrice,
+               sd.copies     as dishCopies
+
+        from setmeal s
+                 left join category c on s.category_id = c.id
+                 left join setmeal_dish sd on s.id = sd.setmeal_id
+        order by s.create_time desc
+    </select>
+
+    <!-- 更新套餐 -->
+
+     <update id="update">
+         update setmeal
+         <set>
+             <if test="name != null and name != ''">name = #{name},</if>
+             <if test="categoryId != null">category_id = #{categoryId},</if>
+             <if test="price != null">price = #{price},</if>
+             <if test="description != null and description != ''">description = #{description},</if>
+             <if test="image != null and image != ''">image = #{image},</if>
+             <if test="updateTime != null">update_time = #{updateTime},</if>
+             <if test="status != null">status = #{status},</if>
+             <if test="updateUser != null">update_user = #{updateUser},</if>
+         </set>
+         where id = #{id}
+     </update>
+
+    <!-- 根据id查询套餐 -->
+
+    <select id="selectById" resultMap="setmealVOResultMap">
+        select s.*,
+               c.name        as categoryName,
+               sd.id         as setmealDishId,
+               sd.dish_id    as dishId,
+               sd.name       as dishName,
+               sd.setmeal_id as setmealId,
+               sd.price      as dishPrice,
+               sd.copies     as dishCopies
+
+        from setmeal s
+                 left join category c on s.category_id = c.id
+                 left join setmeal_dish sd on s.id = sd.setmeal_id
+        where s.id = #{id}
+    </select>
+
+    <!-- 批量查询套餐 --> 
+
+    <select id="selectBatch" resultMap="setmealVOResultMap">
+        select s.*,
+        c.name as categoryName,
+        sd.id as setmealDishId,
+        sd.dish_id as dishId,
+        sd.name as dishName,
+        sd.setmeal_id as setmealId,
+        sd.price as dishPrice,
+        sd.copies as dishCopies
+
+        from setmeal s
+        left join category c on s.category_id = c.id
+        left join setmeal_dish sd on s.id = sd.setmeal_id
+        where s.id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- 批量删除套餐 -->
+
+    <delete id="deleteBatch">
+        delete from setmeal where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
